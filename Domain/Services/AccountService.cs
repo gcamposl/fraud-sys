@@ -6,7 +6,6 @@ namespace Domain.Services
 {
     public class AccountService : IAccountService
     {
-
         public async Task<ResultService<AccountDTO>> CreateAsync(AccountDTO accountDTO)
         {
             if (accountDTO == null)
@@ -20,7 +19,7 @@ namespace Domain.Services
             var account = new AccountDTO
             {
                 Cpf = accountDTO.Cpf,
-                AgencyNumber = accountDTO.AgencyNumber,
+                Agency = accountDTO.Agency,
                 AccountNumber = accountDTO.AccountNumber,
                 Limit = accountDTO.Limit
             };

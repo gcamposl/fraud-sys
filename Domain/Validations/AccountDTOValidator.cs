@@ -18,7 +18,7 @@ namespace Domain.Validations
                 .GreaterThan(0)
                 .WithMessage("O número da conta deve ser maior que 0!");
 
-            RuleFor(x => x.AgencyNumber)
+            RuleFor(x => x.Agency)
                 .NotEmpty()
                 .NotNull()
                 .GreaterThan(0)

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Controllers
 {
     [Route("api/account")]
+    [ApiController]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
@@ -14,7 +15,7 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> PostAccount(AccountDTO accountDTO)
+        public async Task<ActionResult> PostAccount([FromBody] AccountDTO accountDTO)
         {
             var result = await _accountService.CreateAsync(accountDTO);
             if (result.IsSucces)
