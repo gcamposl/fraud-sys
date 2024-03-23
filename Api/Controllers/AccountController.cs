@@ -1,39 +1,47 @@
+using Domain.DTOs;
+using Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    public class AccountController
+    [Route("api/account")]
+    public class AccountController : ControllerBase
     {
-        public AccountController()
+        private readonly IAccountService _accountService;
+        public AccountController(IAccountService accountService)
         {
-
-        }
-        [HttpGet]
-        public void GetAllAccounts()
-        {
-            throw new NotImplementedException();
-        }
-
-        [HttpGet]
-        public void GetAccountByCpf(string cpf)
-        {
-            throw new NotImplementedException();
+            _accountService = accountService;
         }
 
         [HttpPost]
-        public void PostAccount()
+        public async Task<ActionResult> PostAccount(AccountDTO accountDTO)
+        {
+            var result = await _accountService.CreateAsync(accountDTO);
+            if (result.IsSucces)
+                return Ok(accountDTO);
+            return BadRequest(accountDTO);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetAllAccounts()
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetAccountByCpf(string cpf)
         {
             throw new NotImplementedException();
         }
 
         [HttpPut]
-        public void PutAccount()
+        public async Task<ActionResult> PutAccount()
         {
             throw new NotImplementedException();
         }
 
         [HttpDelete]
-        public void DeleteAccountByCpf()
+        public async Task<ActionResult> DeleteAccountByCpf()
         {
             throw new NotImplementedException();
         }

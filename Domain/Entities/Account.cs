@@ -11,18 +11,15 @@ namespace Domain.Entities
 
         public Account(string cpf, int agencyNumber, int accountNumber, decimal limit)
         {
-            Cpf = cpf;
-            AgencyNumber = agencyNumber;
-            AccountNumber = accountNumber;
-            Limit = limit;
+            Validate(cpf, agencyNumber, accountNumber, limit);
         }
 
         public void Validate(string cpf, int agencyNumber, int accountNumber, decimal limit)
         {
-            EntitieValidation.When(string.IsNullOrEmpty(cpf), "Informe o cpf!");
-            EntitieValidation.When(agencyNumber <= 0, "O número da agência deve ser maior que 0!");
-            EntitieValidation.When(accountNumber <= 0, "O número da conta deve ser maior que 0!");
-            EntitieValidation.When(limit < 0, "O limite deve ser maior que 0!");
+            EntitieValidator.When(string.IsNullOrEmpty(cpf), "Informe o cpf!");
+            EntitieValidator.When(agencyNumber <= 0, "O número da agência deve ser maior que 0!");
+            EntitieValidator.When(accountNumber <= 0, "O número da conta deve ser maior que 0!");
+            EntitieValidator.When(limit < 0, "O limite deve ser maior que 0!");
 
             Cpf = cpf;
             AgencyNumber = agencyNumber;
