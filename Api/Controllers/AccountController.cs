@@ -8,12 +8,16 @@ namespace Api.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+        #region private variables
         private readonly IAccountService _accountService;
+        #endregion
+        #region constructor
         public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
         }
-
+        #endregion
+        #region public methods
         [HttpPost]
         public async Task<ActionResult> PostAccount([FromBody] AccountDTO accountDTO)
         {
@@ -24,7 +28,6 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-
         public async Task<ActionResult> GetAllAccounts()
         {
             var result = await _accountService.GetAllAsync();
@@ -35,6 +38,7 @@ namespace Api.Controllers
         }
 
         [HttpGet]
+        [Route("{cpf}")]
         public async Task<ActionResult> GetAccountByCpf(string cpf)
         {
             var result = await _accountService.GetByCpfAsync(cpf);
@@ -45,15 +49,25 @@ namespace Api.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> PutAccount()
+        public async Task<ActionResult> PutAccount([FromBody] AccountDTO accountDTO)
         {
-            throw new NotImplementedException();
+            var result = await _accountService.UpdateAsync(accountDTO);
+            if (result.IsSucces)
+                return Ok(result);
+
+            return BadRequest(result);
         }
 
         [HttpDelete]
-        public async Task<ActionResult> DeleteAccountByCpf()
+        [Route("{cpf}")]
+        public async Task<ActionResult> DeleteAccountByCpf(string cpf)
         {
-            throw new NotImplementedException();
+            var result = await _accountService.DeleteAsync(cpf);
+            if (result.IsSucces)
+                return Ok(result);
+
+            return BadRequest(result);
         }
+        #endregion
     }
 }

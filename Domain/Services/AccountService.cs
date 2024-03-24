@@ -8,15 +8,18 @@ namespace Domain.Services
 {
     public class AccountService : IAccountService
     {
+        #region private variables
         private readonly IAccountRepository _accountRepository;
         private readonly IMapper _mapper;
-
+        #endregion
+        #region constructor
         public AccountService(IAccountRepository accountRepository, IMapper mapper)
         {
             _accountRepository = accountRepository;
             _mapper = mapper;
         }
-
+        #endregion
+        #region public methods
         public async Task<ResultService<AccountDTO>> CreateAsync(AccountDTO accountDTO)
         {
             if (accountDTO == null)
@@ -28,12 +31,14 @@ namespace Domain.Services
 
             var account = _mapper.Map<Account>(accountDTO);
             var data = await _accountRepository.CreateAsync(account);
+
             return ResultService.Ok<AccountDTO>(_mapper.Map<AccountDTO>(data));
         }
 
         public async Task<ResultService<ICollection<AccountDTO>>> GetAllAsync()
         {
             var account = await _accountRepository.SelectAllAsync();
+
             return ResultService.Ok<ICollection<AccountDTO>>(_mapper.Map<ICollection<AccountDTO>>(account));
         }
 
@@ -41,19 +46,40 @@ namespace Domain.Services
         {
             var account = await _accountRepository.SelectByCpfAsync(cpf);
             if (account is null)
-                return ResultService.Fail<AccountDTO>("Conta inexistente");
+                return ResultService.Fail<AccountDTO>("Conta inexistente!");
 
             return ResultService.Ok<AccountDTO>(_mapper.Map<AccountDTO>(account));
         }
 
-        public Task<ResultService<AccountDTO>> UpdateAsync(AccountDTO account)
+        public async Task<ResultService> UpdateAsync(AccountDTO accountDTO)
         {
-            throw new NotImplementedException();
-        }
-        public Task<ResultService<bool>> DeleteAsync(string cpf)
-        {
-            throw new NotImplementedException();
+            if (accountDTO is null)
+                return ResultService.Fail("Os dados da conta devem ser informados!");
+
+            var validation = new AccountDTOValidator().Validate(accountDTO);
+            if (!validation.IsValid)
+                return ResultService.RequestError("Os dados informados estão inválidos!", validation);
+
+            var account = await _accountRepository.SelectByCpfAsync(accountDTO.Cpf);
+            if (account is null)
+                return ResultService.Fail($"Cpf - {accountDTO.Cpf} não possui conta!");
+
+            account = _mapper.Map<AccountDTO, Account>(accountDTO, account);
+            await _accountRepository.UpdateAsync(account);
+
+            return ResultService.Ok($"Dados da conta atualizados! Cpf: {account.Cpf}");
         }
 
+        public async Task<ResultService> DeleteAsync(string cpf)
+        {
+            var account = await _accountRepository.SelectByCpfAsync(cpf);
+            if (account is null)
+                return ResultService.Fail("Conta inexistente!");
+
+            await _accountRepository.DeleteByCpfAsync(cpf);
+
+            return ResultService.Ok($"Conta removida!");
+        }
+        #endregion
     }
 }

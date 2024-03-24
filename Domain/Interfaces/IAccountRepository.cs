@@ -8,8 +8,8 @@ namespace Domain.Interfaces
         Task<Account> CreateAsync(Account account);
         Task<ICollection<Account>> SelectAllAsync();
         Task<Account> SelectByCpfAsync(string cpf);
-        Task<Account> UpdateAsync(Account account);
-        Task<Account> DeleteByCpfAsync(string cpf);
+        Task UpdateAsync(Account account);
+        Task DeleteByCpfAsync(string cpf);
 
     }
 }

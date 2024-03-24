@@ -29,12 +29,12 @@ namespace Data.Repositories.NoSql
             throw new NotImplementedException();
         }
 
-        public async Task<Account> UpdateAsync(Account accountDTO)
+        public async Task UpdateAsync(Account accountDTO)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Account> DeleteByCpfAsync(string cpf)
+        public async Task DeleteByCpfAsync(string cpf)
         {
             throw new NotImplementedException();
         }
