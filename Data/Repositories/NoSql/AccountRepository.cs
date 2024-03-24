@@ -14,7 +14,7 @@ namespace Data.Repositories.NoSql
             _dynamoDb = dynamoDb;
         }
 
-        public async Task<Account> CreateAsync(AccountDTO accountDTO)
+        public async Task<Account> CreateAsync(Account accountDTO)
         {
             throw new NotImplementedException();
         }
@@ -29,7 +29,7 @@ namespace Data.Repositories.NoSql
             throw new NotImplementedException();
         }
 
-        public async Task<Account> UpdateAsync(AccountDTO accountDTO)
+        public async Task<Account> UpdateAsync(Account accountDTO)
         {
             throw new NotImplementedException();
         }

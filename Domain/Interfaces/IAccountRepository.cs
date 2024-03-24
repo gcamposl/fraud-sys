@@ -5,10 +5,10 @@ namespace Domain.Interfaces
 {
     public interface IAccountRepository
     {
-        Task<Account> CreateAsync(AccountDTO account);
+        Task<Account> CreateAsync(Account account);
         Task<ICollection<Account>> SelectAllAsync();
         Task<Account> SelectByCpfAsync(string cpf);
-        Task<Account> UpdateAsync(AccountDTO account);
+        Task<Account> UpdateAsync(Account account);
         Task<Account> DeleteByCpfAsync(string cpf);
 
     }

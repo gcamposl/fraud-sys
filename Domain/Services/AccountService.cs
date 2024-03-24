@@ -1,4 +1,6 @@
+using AutoMapper;
 using Domain.DTOs;
+using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Validations;
 
@@ -6,6 +8,15 @@ namespace Domain.Services
 {
     public class AccountService : IAccountService
     {
+        private readonly IAccountRepository _accountRepository;
+        private readonly IMapper _mapper;
+
+        public AccountService(IAccountRepository accountRepository, IMapper mapper)
+        {
+            _accountRepository = accountRepository;
+            _mapper = mapper;
+        }
+
         public async Task<ResultService<AccountDTO>> CreateAsync(AccountDTO accountDTO)
         {
             if (accountDTO == null)
@@ -15,26 +26,24 @@ namespace Domain.Services
             if (!result.IsValid)
                 return ResultService.RequestError<AccountDTO>("Problema na validação dos dados!", result);
 
-            //TODO: refact para autoMapper - mesmo sendo menos performatico
-            var account = new AccountDTO
-            {
-                Cpf = accountDTO.Cpf,
-                Agency = accountDTO.Agency,
-                AccountNumber = accountDTO.AccountNumber,
-                Limit = accountDTO.Limit
-            };
-
-            return ResultService.Ok<AccountDTO>(account);
+            var account = _mapper.Map<Account>(accountDTO);
+            var data = await _accountRepository.CreateAsync(account);
+            return ResultService.Ok<AccountDTO>(_mapper.Map<AccountDTO>(data));
         }
 
-        public Task<ResultService<ICollection<AccountDTO>>> GetAllAsync()
+        public async Task<ResultService<ICollection<AccountDTO>>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var account = await _accountRepository.SelectAllAsync();
+            return ResultService.Ok<ICollection<AccountDTO>>(_mapper.Map<ICollection<AccountDTO>>(account));
         }
 
-        public Task<ResultService<AccountDTO>> GetByCpfAsync(string cpf)
+        public async Task<ResultService<AccountDTO>> GetByCpfAsync(string cpf)
         {
-            throw new NotImplementedException();
+            var account = await _accountRepository.SelectByCpfAsync(cpf);
+            if (account is null)
+                return ResultService.Fail<AccountDTO>("Conta inexistente");
+
+            return ResultService.Ok<AccountDTO>(_mapper.Map<AccountDTO>(account));
         }
 
         public Task<ResultService<AccountDTO>> UpdateAsync(AccountDTO account)

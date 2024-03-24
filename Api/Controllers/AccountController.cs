@@ -27,13 +27,21 @@ namespace Api.Controllers
 
         public async Task<ActionResult> GetAllAccounts()
         {
-            throw new NotImplementedException();
+            var result = await _accountService.GetAllAsync();
+            if (result.IsSucces)
+                return Ok(result);
+
+            return BadRequest(result);
         }
 
         [HttpGet]
         public async Task<ActionResult> GetAccountByCpf(string cpf)
         {
-            throw new NotImplementedException();
+            var result = await _accountService.GetByCpfAsync(cpf);
+            if (result.IsSucces)
+                return Ok(result);
+
+            return BadRequest(result);
         }
 
         [HttpPut]
