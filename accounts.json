@@ -1,0 +1,27 @@
+{
+  "TableName": "Accounts",
+  "AttributeDefinitions": [
+      {
+          "AttributeName": "Cpf",
+          "AttributeType": "S"
+      },
+      {
+          "AttributeName": "AccountNumber",
+          "AttributeType": "N"
+      }
+  ],
+  "KeySchema": [
+      {
+          "AttributeName": "Cpf",
+          "KeyType": "HASH"
+      },
+      {
+          "AttributeName": "AccountNumber",
+          "KeyType": "RANGE"
+      }
+  ],
+  "ProvisionedThroughput": {
+      "ReadCapacityUnits": 5,
+      "WriteCapacityUnits": 5
+  }
+}
