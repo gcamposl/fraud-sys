@@ -1,3 +1,6 @@
+using Amazon;
+using Amazon.DynamoDBv2;
+using Data.Repositories.NoSql;
 using Domain.Interfaces;
 using Domain.Services;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +12,8 @@ namespace IoC
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IAccountService, AccountService>();
+            services.AddSingleton<IAmazonDynamoDB>(_ => new AmazonDynamoDBClient(RegionEndpoint.SAEast1));
+            services.AddScoped<IAccountRepository, AccountRepository>();
 
             return services;
         }

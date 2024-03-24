@@ -26,5 +26,25 @@ namespace Domain.Services
 
             return ResultService.Ok<AccountDTO>(account);
         }
+
+        public Task<ResultService<ICollection<AccountDTO>>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ResultService<AccountDTO>> GetByCpfAsync(string cpf)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ResultService<AccountDTO>> UpdateAsync(AccountDTO account)
+        {
+            throw new NotImplementedException();
+        }
+        public Task<ResultService<bool>> DeleteAsync(string cpf)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

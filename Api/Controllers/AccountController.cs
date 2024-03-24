@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    [Route("api/account")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -24,6 +24,7 @@ namespace Api.Controllers
         }
 
         [HttpGet]
+
         public async Task<ActionResult> GetAllAccounts()
         {
             throw new NotImplementedException();
