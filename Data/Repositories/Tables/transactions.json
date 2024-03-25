@@ -1,0 +1,27 @@
+{
+    "TableName": "Transactions",
+    "AttributeDefinitions": [
+        {
+            "AttributeName": "Source",
+            "AttributeType": "S"
+        },
+        {
+            "AttributeName": "Value",
+            "AttributeType": "N"
+        }
+    ],
+    "KeySchema": [
+        {
+            "AttributeName": "Source",
+            "KeyType": "HASH"
+        },
+        {
+            "AttributeName": "Value",
+            "KeyType": "RANGE"
+        }
+    ],
+    "ProvisionedThroughput": {
+        "ReadCapacityUnits": 5,
+        "WriteCapacityUnits": 5
+    }
+  }

@@ -1,4 +1,6 @@
+using System.Xml.Linq;
 using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 using Domain.Entities;
 using Domain.Interfaces;
@@ -8,31 +10,20 @@ namespace Data.Repositories.NoSql
     public class AccountRepository : IAccountRepository
     {
         private readonly IAmazonDynamoDB _dynamoDb;
+        private readonly IDynamoDBContext _context;
 
-        public AccountRepository(IAmazonDynamoDB dynamoDb)
+        public AccountRepository(IAmazonDynamoDB dynamoDb, IDynamoDBContext context)
         {
             _dynamoDb = dynamoDb;
+            _context = context;
         }
 
-        public async Task<Account> CreateAsync(Account account)
+        public async Task CreateAsync(Account account)
+            => await _context.SaveAsync(account);
+
+        public async Task<IEnumerable<Account>> SelectAllAsync()
         {
-            var table = Table.LoadTable(_dynamoDb, "Accounts");
-            var document = new Document
-            {
-                ["Cpf"] = account.Cpf,
-                ["Agency"] = account.Agency,
-                ["AccountNumber"] = account.AccountNumber,
-                ["Limit"] = account.Limit
-            };
-
-            await table.PutItemAsync(document);
-
-            return account;
-        }
-
-        public async Task<ICollection<Account>> SelectAllAsync()
-        {
-            //TODO: simplicar este método!!!
+            //TODO: simplicar este método!
             var table = Table.LoadTable(_dynamoDb, "Accounts");
             var scanOptions = new ScanOperationConfig();
             var search = table.Scan(scanOptions);
@@ -59,23 +50,13 @@ namespace Data.Repositories.NoSql
         }
 
         public async Task UpdateAsync(Account account)
-        {
-            var table = Table.LoadTable(_dynamoDb, "Accounts");
-            var document = new Document
-            {
-                ["Cpf"] = account.Cpf,
-                ["Agency"] = account.Agency,
-                ["AccountNumber"] = account.AccountNumber,
-                ["Limit"] = account.Limit
-            };
-
-            await table.UpdateItemAsync(document);
-        }
+            => await _context.SaveAsync(account);
 
         public async Task DeleteByCpfAsync(string cpf)
         {
-            var table = Table.LoadTable(_dynamoDb, "Accounts");
-            await table.DeleteItemAsync(cpf);
+            // var table = Table.LoadTable(_dynamoDb, "Accounts");
+            // await table.DeleteItemAsync(cpf);
+            await _context.DeleteAsync<Account>(cpf);
         }
 
         private static Account DocumentToAccount(Document document)

@@ -6,8 +6,7 @@ namespace Domain.Mappings
 {
     public class DtoToDomainMapping : Profile
     {
-        //TODO: montar o mapping
-        DtoToDomainMapping()
+        public DtoToDomainMapping()
         {
             CreateMap<AccountDTO, Account>();
         }

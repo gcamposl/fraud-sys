@@ -4,8 +4,8 @@ namespace Domain.Interfaces
 {
     public interface IAccountRepository
     {
-        Task<Account> CreateAsync(Account account);
-        Task<ICollection<Account>> SelectAllAsync();
+        Task CreateAsync(Account account);
+        Task<IEnumerable<Account>> SelectAllAsync();
         Task<Account> SelectByCpfAsync(string cpf);
         Task UpdateAsync(Account account);
         Task DeleteByCpfAsync(string cpf);

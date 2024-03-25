@@ -1,12 +1,18 @@
+using Amazon.DynamoDBv2.DataModel;
 using Domain.Validations;
 
 namespace Domain.Entities
 {
+    [DynamoDBTable("Accounts")]
     public sealed class Account
     {
+        [DynamoDBHashKey("Cpf")]
         public string Cpf { get; set; }
+        [DynamoDBRangeKey("AccountNumber")]
         public int Agency { get; set; }
+        [DynamoDBProperty]
         public int AccountNumber { get; set; }
+        [DynamoDBProperty]
         public decimal Limit { get; set; }
 
         public Account(string cpf, int agency, int accountNumber, decimal limit)

@@ -8,33 +8,32 @@ namespace Api.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        #region private variables
         private readonly IAccountService _accountService;
-        #endregion
-        #region constructor
+
         public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
         }
-        #endregion
-        #region public methods
+
         [HttpPost]
         public async Task<ActionResult> PostAccount([FromBody] AccountDTO accountDTO)
         {
             var result = await _accountService.CreateAsync(accountDTO);
             if (result.IsSucces)
                 return Ok(accountDTO);
+
             return BadRequest(accountDTO);
         }
 
         [HttpGet]
         public async Task<ActionResult> GetAllAccounts()
         {
+            Console.WriteLine("kadklasd");
             var result = await _accountService.GetAllAsync();
             if (result.IsSucces)
                 return Ok(result);
 
-            return BadRequest(result);
+            return Ok(result);
         }
 
         [HttpGet]
@@ -68,6 +67,5 @@ namespace Api.Controllers
 
             return BadRequest(result);
         }
-        #endregion
     }
 }

@@ -8,38 +8,35 @@ namespace Domain.Services
 {
     public class AccountService : IAccountService
     {
-        #region private variables
         private readonly IAccountRepository _accountRepository;
         private readonly IMapper _mapper;
-        #endregion
-        #region constructor
+
         public AccountService(IAccountRepository accountRepository, IMapper mapper)
         {
             _accountRepository = accountRepository;
             _mapper = mapper;
         }
-        #endregion
-        #region public methods
+
         public async Task<ResultService<AccountDTO>> CreateAsync(AccountDTO accountDTO)
         {
             if (accountDTO == null)
-                return ResultService.Fail<AccountDTO>("Objeto vazio!");
+                return ResultService.Fail<AccountDTO>("Preencha os dados da Conta!");
 
             var result = new AccountDTOValidator().Validate(accountDTO);
             if (!result.IsValid)
                 return ResultService.RequestError<AccountDTO>("Problema na validação dos dados!", result);
 
             var account = _mapper.Map<Account>(accountDTO);
-            var data = await _accountRepository.CreateAsync(account);
+            await _accountRepository.CreateAsync(account);
 
-            return ResultService.Ok<AccountDTO>(_mapper.Map<AccountDTO>(data));
+            return ResultService.Ok<AccountDTO>(accountDTO);
         }
 
-        public async Task<ResultService<ICollection<AccountDTO>>> GetAllAsync()
+        public async Task<ResultService<IEnumerable<AccountDTO>>> GetAllAsync()
         {
             var account = await _accountRepository.SelectAllAsync();
 
-            return ResultService.Ok<ICollection<AccountDTO>>(_mapper.Map<ICollection<AccountDTO>>(account));
+            return ResultService.Ok<IEnumerable<AccountDTO>>(_mapper.Map<ICollection<AccountDTO>>(account));
         }
 
         public async Task<ResultService<AccountDTO>> GetByCpfAsync(string cpf)
@@ -80,6 +77,5 @@ namespace Domain.Services
 
             return ResultService.Ok($"Conta removida!");
         }
-        #endregion
     }
 }

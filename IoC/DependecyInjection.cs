@@ -1,5 +1,5 @@
-using Amazon;
 using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
 using Data.Repositories.NoSql;
 using Domain.Interfaces;
 using Domain.Mappings;
@@ -13,8 +13,10 @@ namespace IoC
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IAmazonDynamoDB>(_ => new AmazonDynamoDBClient(RegionEndpoint.SAEast1));
+            services.AddSingleton<IAmazonDynamoDB, AmazonDynamoDBClient>();
+            services.AddSingleton<IDynamoDBContext, DynamoDBContext>();
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<ITransactionRepository, TransactionRepository>();
 
             return services;
         }
@@ -23,6 +25,7 @@ namespace IoC
         {
             services.AddAutoMapper(typeof(DtoToDomainMapping));
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<ITransactionService, TransactionService>();
 
             return services;
         }

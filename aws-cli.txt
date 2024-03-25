@@ -1,0 +1,9 @@
+-- list all tables
+aws dynamodb list-tables --endpoint-url http://localhost:8000
+
+-- table list and your fields
+aws dynamodb describe-table --table-name Accounts --endpoint-url http://localhost:8000
+
+-- create table
+aws dynamodb create-table --cli-input-json file:///Users/campos/www/fraud-sys/Data/Repositories/Tables/accounts.json --endpoint-url http://localhost:8000
+aws dynamodb create-table --cli-input-json file:///Users/campos/www/fraud-sys/Data/Repositories/Tables/transactions.json --endpoint-url http://localhost:8000
