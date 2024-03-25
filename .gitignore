@@ -9,6 +9,7 @@
 
 DockerFile
 docker/
+volume/
 
 #
 #

@@ -9,6 +9,7 @@ namespace Domain.Mappings
         public DtoToDomainMapping()
         {
             CreateMap<AccountDTO, Account>();
+            CreateMap<TransactionDTO, Transaction>();
         }
     }
 }
