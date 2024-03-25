@@ -1,7 +1,7 @@
-# Projeto FraudSyS com .net 8, DynamoDb-local e docker-compose
+# Projeto FraudSyS com .net 8, DynamoDb-local e docker-compose (in progress... ~80% ⚙️)
 
 Este é um projeto criado com intuito de validar alguns conhecimentos em Solid, DDD, manipulação de banco noSql e clean code.
-O projeto é basicamente um autorizador de transações bancárias simplificado, validando apenas dados da conta e limite disponível.
+O projeto é basicamente um autorizador de transações bancárias simplificado, validan⚙️do apenas dados da conta e limite disponível.
 
 ## Requisitos
 
