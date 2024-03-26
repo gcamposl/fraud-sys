@@ -19,7 +19,7 @@ namespace Api.Controllers
         public async Task<ActionResult> PostAsync([FromBody] TransactionDTO transactionDTO)
         {
             var result = await _transactionService.CreateAsync(transactionDTO);
-            if (result.IsSucces)
+            if (result.IsSuccess)
                 return Ok(transactionDTO);
 
             return BadRequest(transactionDTO);

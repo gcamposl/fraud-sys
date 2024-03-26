@@ -45,7 +45,7 @@ namespace Test
             var result = await _accountService.CreateAsync(accountDTO);
 
             // Assert
-            Assert.That(result.IsSucces);
+            Assert.That(result.IsSuccess);
             Assert.Equals("12345678901", result.Data.Cpf);
         }
 
@@ -64,7 +64,7 @@ namespace Test
             var result = await _accountService.GetAllAsync();
 
             // Assert
-            Assert.That(result.IsSucces);
+            Assert.That(result.IsSuccess);
             Assert.Equals(2, result.Data.Count());
         }
     }

@@ -6,9 +6,9 @@ namespace Domain.Interfaces
     {
         Task CreateAsync(Account account);
         Task<IEnumerable<Account>> SelectAllAsync();
-        Task<Account> SelectByCpfAsync(string cpf);
+        Task<ICollection<Account>> SelectByCpfAsync(string cpf);
         Task UpdateAsync(Account account);
-        Task DeleteByCpfAsync(string cpf);
+        Task DeleteByCpfAsync(string cpf, int accountNumber);
 
     }
 }

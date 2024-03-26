@@ -1,3 +1,4 @@
+using System.Net;
 using Domain.Validations;
 using FluentValidation.Results;
 
@@ -5,22 +6,22 @@ namespace Domain.Services
 {
     public class ResultService
     {
-        public bool IsSucces { get; set; }
+        public bool IsSuccess { get; set; }
         public string Message { get; set; }
         public ICollection<ErrorValidator> Errors { get; set; }
 
         public static ResultService Ok(string message)
-            => new ResultService { IsSucces = true, Message = message };
+            => new ResultService { IsSuccess = true, Message = message };
         public static ResultService<T> Ok<T>(T data)
-            => new ResultService<T> { Data = data };
+            => new ResultService<T> { IsSuccess = true, Data = data };
         public static ResultService Fail(string message)
-            => new ResultService { IsSucces = false, Message = message };
+            => new ResultService { IsSuccess = false, Message = message };
         public static ResultService<T> Fail<T>(string message)
-            => new ResultService<T> { Message = message };
+            => new ResultService<T> { IsSuccess = false, Message = message };
         public static ResultService RequestError(string message, ValidationResult validationResult)
             => new ResultService
             {
-                IsSucces = false,
+                IsSuccess = false,
                 Message = message,
                 Errors = validationResult.Errors
                     .Select(x => new ErrorValidator
@@ -33,7 +34,7 @@ namespace Domain.Services
         public static ResultService<T> RequestError<T>(string message, ValidationResult validationResult)
             => new ResultService<T>
             {
-                IsSucces = false,
+                IsSuccess = false,
                 Message = message,
                 Errors = validationResult.Errors
                     .Select(x => new ErrorValidator

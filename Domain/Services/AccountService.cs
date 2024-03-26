@@ -1,42 +1,42 @@
-using AutoMapper;
 using Domain.DTOs;
 using Domain.Entities;
-using Domain.Interfaces;
 using Domain.Validations;
+using Domain.Interfaces;
 
 namespace Domain.Services
 {
     public class AccountService : IAccountService
     {
         private readonly IAccountRepository _accountRepository;
-        private readonly IMapper _mapper;
 
-        public AccountService(IAccountRepository accountRepository, IMapper mapper)
+        public AccountService(IAccountRepository accountRepository)
         {
             _accountRepository = accountRepository;
-            _mapper = mapper;
         }
 
         public async Task<ResultService<AccountDTO>> CreateAsync(AccountDTO accountDTO)
         {
-            if (accountDTO == null)
-                return ResultService.Fail<AccountDTO>("Preencha os dados da Conta!");
+            if (!CpfValidator.IsValidCpf(accountDTO.Cpf))
+                return ResultService.Fail<AccountDTO>("CpfInválido!");
 
             var result = new AccountDTOValidator().Validate(accountDTO);
             if (!result.IsValid)
                 return ResultService.RequestError<AccountDTO>("Problema na validação dos dados!", result);
 
-            var account = _mapper.Map<Account>(accountDTO);
-            await _accountRepository.CreateAsync(account);
+            await _accountRepository.CreateAsync(MappingToEntitie(accountDTO));
 
-            return ResultService.Ok<AccountDTO>(accountDTO);
+            return ResultService.Ok(accountDTO);
         }
 
-        public async Task<ResultService<IEnumerable<AccountDTO>>> GetAllAsync()
+        public async Task<ResultService<List<AccountDTO>>> GetAllAsync()
         {
-            var account = await _accountRepository.SelectAllAsync();
+            var accounts = await _accountRepository.SelectAllAsync();
+            var listOfAccountsDto = new List<AccountDTO>();
 
-            return ResultService.Ok<IEnumerable<AccountDTO>>(_mapper.Map<ICollection<AccountDTO>>(account));
+            foreach (var account in accounts)
+                listOfAccountsDto.Add(MappingToDto(account));
+
+            return ResultService.Ok(listOfAccountsDto);
         }
 
         public async Task<ResultService<AccountDTO>> GetByCpfAsync(string cpf)
@@ -45,14 +45,11 @@ namespace Domain.Services
             if (account is null)
                 return ResultService.Fail<AccountDTO>("Conta inexistente!");
 
-            return ResultService.Ok<AccountDTO>(_mapper.Map<AccountDTO>(account));
+            return ResultService.Ok(MappingToDto(account.First()));
         }
 
         public async Task<ResultService> UpdateAsync(AccountDTO accountDTO)
         {
-            if (accountDTO is null)
-                return ResultService.Fail("Os dados da conta devem ser informados!");
-
             var validation = new AccountDTOValidator().Validate(accountDTO);
             if (!validation.IsValid)
                 return ResultService.RequestError("Os dados informados estão inválidos!", validation);
@@ -61,21 +58,29 @@ namespace Domain.Services
             if (account is null)
                 return ResultService.Fail($"Cpf - {accountDTO.Cpf} não possui conta!");
 
-            account = _mapper.Map<AccountDTO, Account>(accountDTO, account);
-            await _accountRepository.UpdateAsync(account);
+            // usando o dynamoDBClient fica muito pesado...
+            await _accountRepository.DeleteByCpfAsync(account.First().Cpf, account.First().AccountNumber);
+            await _accountRepository.UpdateAsync(MappingToEntitie(accountDTO));
 
-            return ResultService.Ok($"Dados da conta atualizados! Cpf: {account.Cpf}");
+            return ResultService.Ok($"Dados da conta atualizados!");
         }
 
-        public async Task<ResultService> DeleteAsync(string cpf)
+        public async Task<ResultService> DeleteAsync(string cpf, int accountNumber)
         {
             var account = await _accountRepository.SelectByCpfAsync(cpf);
             if (account is null)
                 return ResultService.Fail("Conta inexistente!");
 
-            await _accountRepository.DeleteByCpfAsync(cpf);
+            await _accountRepository.DeleteByCpfAsync(cpf, accountNumber);
 
             return ResultService.Ok($"Conta removida!");
         }
+
+        // Não utilizei autoMapper por conta de performance
+        private static Account MappingToEntitie(AccountDTO accountDTO)
+            => new Account(accountDTO.Cpf, accountDTO.Agency, accountDTO.AccountNumber, accountDTO.Limit);
+
+        private static AccountDTO MappingToDto(Account account)
+            => new AccountDTO { Cpf = account.Cpf, Agency = account.Agency, AccountNumber = account.AccountNumber, Limit = account.Limit };
     }
 }

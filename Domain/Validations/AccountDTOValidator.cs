@@ -15,20 +15,21 @@ namespace Domain.Validations
             RuleFor(x => x.AccountNumber)
                 .NotEmpty()
                 .NotNull()
-                .GreaterThan(0)
-                .WithMessage("O número da conta deve ser maior que 0!");
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("O número da conta deve ser maior ou igual a 0!");
 
             RuleFor(x => x.Agency)
                 .NotEmpty()
                 .NotNull()
-                .GreaterThan(0)
-                .WithMessage("O número da agência deve ser maior que 0!");
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("O número da agência deve ser maior ou igual a 0!");
 
             RuleFor(x => x.Limit)
                 .NotEmpty()
                 .NotNull()
-                .GreaterThan(0)
-                .WithMessage("O limite deve ser maior que 0!");
+                // bizarro como isso não funciona direito... 
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("O limite deve ser maior ou igual a 0!");
         }
     }
 }

@@ -41,23 +41,14 @@ namespace Data.Repositories.NoSql
             return accounts;
         }
 
-        public async Task<Account> SelectByCpfAsync(string cpf)
-        {
-            var table = Table.LoadTable(_dynamoDb, "Accounts");
-            var document = await table.GetItemAsync(cpf);
-
-            return document != null ? DocumentToAccount(document) : null;
-        }
+        public async Task<ICollection<Account>> SelectByCpfAsync(string cpf)
+            => await _context.QueryAsync<Account>(cpf).GetRemainingAsync();
 
         public async Task UpdateAsync(Account account)
             => await _context.SaveAsync(account);
 
-        public async Task DeleteByCpfAsync(string cpf)
-        {
-            // var table = Table.LoadTable(_dynamoDb, "Accounts");
-            // await table.DeleteItemAsync(cpf);
-            await _context.DeleteAsync<Account>(cpf);
-        }
+        public async Task DeleteByCpfAsync(string cpf, int accountNumber)
+            => await _context.DeleteAsync<Account>(cpf, accountNumber);
 
         private static Account DocumentToAccount(Document document)
             => new Account(

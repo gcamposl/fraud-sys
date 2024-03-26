@@ -35,7 +35,8 @@ namespace Domain.Services
                 if (!result.IsValid)
                     return ResultService.RequestError<TransactionDTO>("Problema na validação dos dados!", result);
 
-                var sourceAccount = await _accountRepository.SelectByCpfAsync(transactionDTO.Source);
+                var sourceAccountList = await _accountRepository.SelectByCpfAsync(transactionDTO.Source);
+                var sourceAccount = sourceAccountList.First();
                 if (sourceAccount is null)
                     return ResultService.Fail("Conta de origem não encontrada!");
 
@@ -56,8 +57,7 @@ namespace Domain.Services
 
                 await _accountService.UpdateAsync(account);
 
-                var transaction = _mapper.Map<TransactionDTO, Entities.Transaction>(transactionDTO);
-                await _transactionRepository.CreateAsync(transaction);
+                await _transactionRepository.CreateAsync(MappingToEntitie(transactionDTO));
 
                 // confirma a transação se todas as operações foram bem sucedidas
                 transactionScope.Complete();
@@ -70,5 +70,8 @@ namespace Domain.Services
                 return ResultService.Fail("Ocorreu um erro ao processar a transação: " + ex.Message);
             }
         }
+
+        private Entities.Transaction MappingToEntitie(TransactionDTO transactionDTO)
+            => new(transactionDTO.Source, transactionDTO.Destiny, transactionDTO.Value);
     }
 }

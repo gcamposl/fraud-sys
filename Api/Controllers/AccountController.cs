@@ -19,8 +19,8 @@ namespace Api.Controllers
         public async Task<ActionResult> PostAccount([FromBody] AccountDTO accountDTO)
         {
             var result = await _accountService.CreateAsync(accountDTO);
-            if (result.IsSucces)
-                return Ok(accountDTO);
+            if (result.IsSuccess)
+                return Created("Conta criada! ", accountDTO);
 
             return BadRequest(accountDTO);
         }
@@ -30,7 +30,7 @@ namespace Api.Controllers
         {
             Console.WriteLine("kadklasd");
             var result = await _accountService.GetAllAsync();
-            if (result.IsSucces)
+            if (result.IsSuccess)
                 return Ok(result);
 
             return Ok(result);
@@ -41,7 +41,7 @@ namespace Api.Controllers
         public async Task<ActionResult> GetAccountByCpf(string cpf)
         {
             var result = await _accountService.GetByCpfAsync(cpf);
-            if (result.IsSucces)
+            if (result.IsSuccess)
                 return Ok(result);
 
             return BadRequest(result);
@@ -51,18 +51,18 @@ namespace Api.Controllers
         public async Task<ActionResult> PutAccount([FromBody] AccountDTO accountDTO)
         {
             var result = await _accountService.UpdateAsync(accountDTO);
-            if (result.IsSucces)
+            if (result.IsSuccess)
                 return Ok(result);
 
             return BadRequest(result);
         }
 
         [HttpDelete]
-        [Route("{cpf}")]
-        public async Task<ActionResult> DeleteAccountByCpf(string cpf)
+        public async Task<ActionResult> DeleteAccountByCpf([FromQuery] string cpf, [FromQuery] int accountNumber)
         {
-            var result = await _accountService.DeleteAsync(cpf);
-            if (result.IsSucces)
+
+            var result = await _accountService.DeleteAsync(cpf, accountNumber);
+            if (result.IsSuccess)
                 return Ok(result);
 
             return BadRequest(result);
