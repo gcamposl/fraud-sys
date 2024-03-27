@@ -6,5 +6,6 @@ namespace Domain.Interfaces
     public interface ITransactionService
     {
         Task<ResultService> CreateAsync(TransactionDTO transactionDTO);
+        Task<ResultService<List<TransactionDTO>>> GetAllAsync();
     }
 }

@@ -14,7 +14,7 @@ namespace Domain.Services
             _accountRepository = accountRepository;
         }
 
-        public async Task<ResultService<AccountDTO>> CreateAsync(AccountDTO accountDTO)
+        public async Task<ResultService> CreateAsync(AccountDTO accountDTO)
         {
             if (!CpfValidator.IsValidCpf(accountDTO.Cpf))
                 return ResultService.Fail<AccountDTO>("CpfInválido!");

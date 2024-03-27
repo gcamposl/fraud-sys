@@ -8,15 +8,18 @@ namespace Domain.Entities
     {
         [DynamoDBHashKey("Source")]
         public string Source { get; set; }
-        [DynamoDBProperty]
+        [DynamoDBRangeKey("Destiny")]
         public string Destiny { get; set; }
-        [DynamoDBRangeKey("Value")]
+        [DynamoDBProperty]
         public decimal Value { get; set; }
 
         public Transaction(string source, string destiny, decimal value)
         {
             Validate(source, destiny, value);
         }
+
+        public Transaction()
+        { }
 
         public void Validate(string source, string destiny, decimal value)
         {

@@ -23,7 +23,6 @@ namespace Data.Repositories.NoSql
 
         public async Task<IEnumerable<Account>> SelectAllAsync()
         {
-            //TODO: simplicar este método!
             var table = Table.LoadTable(_dynamoDb, "Accounts");
             var scanOptions = new ScanOperationConfig();
             var search = table.Scan(scanOptions);

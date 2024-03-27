@@ -16,13 +16,23 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> PostAsync([FromBody] TransactionDTO transactionDTO)
+        public async Task<ActionResult> PostTransaction([FromBody] TransactionDTO transactionDTO)
         {
             var result = await _transactionService.CreateAsync(transactionDTO);
             if (result.IsSuccess)
-                return Ok(transactionDTO);
+                return Ok(result);
 
-            return BadRequest(transactionDTO);
+            return BadRequest(result);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetAllTransactions()
+        {
+            var result = await _transactionService.GetAllAsync();
+            if (result.IsSuccess)
+                return Ok(result);
+
+            return BadRequest(result);
         }
     }
 }

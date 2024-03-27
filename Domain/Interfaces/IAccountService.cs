@@ -6,7 +6,7 @@ namespace Domain.Interfaces
 {
     public interface IAccountService
     {
-        Task<ResultService<AccountDTO>> CreateAsync(AccountDTO accountDTO);
+        Task<ResultService> CreateAsync(AccountDTO accountDTO);
         Task<ResultService<List<AccountDTO>>> GetAllAsync();
         Task<ResultService<AccountDTO>> GetByCpfAsync(string cpf);
         Task<ResultService> UpdateAsync(AccountDTO accountDTO);

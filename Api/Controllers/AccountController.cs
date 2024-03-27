@@ -20,7 +20,7 @@ namespace Api.Controllers
         {
             var result = await _accountService.CreateAsync(accountDTO);
             if (result.IsSuccess)
-                return Created("Conta criada! ", accountDTO);
+                return Created("Conta criada! ", result);
 
             return BadRequest(accountDTO);
         }

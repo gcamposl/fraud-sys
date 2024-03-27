@@ -12,7 +12,6 @@ namespace Test
     public class AccountServiceTests
     {
         private Mock<IAccountRepository> _mockAccountRepository;
-        private IMapper _mapper;
         private IAccountService _accountService;
 
         [SetUp]
@@ -24,8 +23,7 @@ namespace Test
                 cfg.CreateMap<Account, AccountDTO>();
                 cfg.CreateMap<AccountDTO, Account>();
             });
-            _mapper = configuration.CreateMapper();
-            _accountService = new AccountService(_mockAccountRepository.Object, _mapper);
+            _accountService = new AccountService(_mockAccountRepository.Object);
         }
 
         [Test]
@@ -46,7 +44,6 @@ namespace Test
 
             // Assert
             Assert.That(result.IsSuccess);
-            Assert.Equals("12345678901", result.Data.Cpf);
         }
 
         [Test]
